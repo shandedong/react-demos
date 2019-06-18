@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>this.props.children</title>
+    <script src="../build/react.development.js"></script>
+    <script src="../build/react-dom.development.js"></script>
+    <script src="../build/babel.min.js"></script>
+</head>
+<body>
+    <div id="app"></div>
+
+    <script type="text/babel">
+        const app = document.getElementById('app');
+
+        class NotesList extends React.Component {
+            render() {
+                const { children } = this.props;
+
+                console.log(children);
+
+                console.log(React.Children);
+
+                console.log(React.Children.toArray(children));
+                
+                return (
+                    <div>
+                        <div>{ this.props.children }</div>
+                    </div>
+                );
+            }
+        }
+
+        ReactDOM.render(
+            <NotesList>
+                <h4>hello</h4>
+                <h4>world</h4>
+                <div>
+                    hello
+
+                    world
+                </div>
+            </NotesList>,
+            app
+        );
+    </script>
+</body>
+</html>

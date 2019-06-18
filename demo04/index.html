@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>define component</title>
+    <script src="../build/react.development.js"></script>
+    <script src="../build/react-dom.development.js"></script>
+    <script src="../build/babel.min.js"></script>
+</head>
+<body>
+    <div id="app"></div>
+
+    <script type="text/babel">
+        const app = document.getElementById('app');
+
+        class HelloMessage extends React.Component {
+            render() {
+                const { name } = this.props;
+
+                return (
+                    <div>
+                        <h4>result of typeof name: {typeof name}</h4>
+                        <h4>Hello, { name.toUpperCase() }</h4>
+                    </div>
+                )
+            }
+        }
+
+        ReactDOM.render(
+            <HelloMessage name='kobe'/>,
+            app
+        );
+    </script>
+</body>
+</html>
