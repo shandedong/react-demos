@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>todo</title>
+    <script src="../build/react.development.js"></script>
+    <script src="../build/react-dom.development.js"></script>
+    <script src="../build/babel.min.js"></script>
+</head>
+<body>
+    <div id="app">
+
+    </div>
+
+    <script type="text/babel">
+        const app = document.getElementById('app');
+
+        class TodoApp extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {
+                    value: '',
+                    todoList: []
+                };
+
+                this.add = this.add.bind(this);
+            }
+
+            inputChange(e) {
+                this.setState({
+                    value: e.target.value,
+                });
+            }
+
+            add() {
+                let { value, todoList } = this.state;
+
+                if (!value) return;
+
+                todoList.push({
+                    text: value,
+                    id: Date.now()
+                });
+
+                this.setState({ todoList, value: '' });
+            }
+
+            render() {
+                let { value, todoList } = this.state;
+
+                return (
+                    <div>
+                        <h4>TODO</h4>
+
+                        <p>what need you do?</p>
+
+                        <input style={{border: '1px solid #000'}} value={value} onChange={(e) => this.inputChange(e)}/>
+
+                        <br/>
+
+                        <button style={{border: '1px solid #000', margin: '10px 0'}} onClick={this.add}>ADD TODO #{todoList.length}</button>
+
+                        <TodoList todoList={todoList}/>
+                    </div>
+                )
+            }
+        }
+
+        class TodoList extends React.Component {
+            render() {
+                const { todoList } = this.props;
+
+                return (
+                    <ul>
+                        {
+                            todoList.map(todo => {
+                                return (
+                                    <li key={todo.id}>{ todo.text }</li>
+                                )
+                            })
+                        }
+                    </ul>
+                )
+            }
+        }
+
+        ReactDOM.render(
+            <TodoApp />,
+            app
+        );
+    </script>
+</body>
+</html>
