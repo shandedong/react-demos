@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>PropTypes</title>
+    <title>PropTypes defaultProps</title>
     <script src="../build/react.development.js"></script>
     <script src="../build/react-dom.development.js"></script>
     <script src="../build/babel.min.js"></script>
@@ -27,7 +27,7 @@
 
             render() {
                 return (
-                    <h4>Hello, { this.props.name }</h4>
+                    <h4>name: { this.props.name }</h4>
                 )
             }
         }
@@ -44,10 +44,23 @@
             age: PropTypes.number.isRequired,
         }
 
+        class MySex extends React.Component {
+            static defaultProps = {
+                sex: '男'
+            };
+
+            render() {
+                return (
+                    <h4>sex: { this.props.sex }</h4>
+                )
+            }
+        }
+
         ReactDOM.render(
             <div>
                 <MyName name='kobe' />
                 <MyAge age={35}/>
+                <MySex />
             </div>,
             app
         );
