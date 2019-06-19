@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Ref(find a DOM node)</title>
+    <script src="../build/react.development.js"></script>
+    <script src="../build/react-dom.development.js"></script>
+    <script src="../build/babel.min.js"></script>
+</head>
+<body>
+    <div id="app"></div>
+
+    <script type="text/babel">
+        const app = document.getElementById('app');
+
+        class MyComponent extends React.Component {
+            constructor(props) {
+                super(props);
+                // or
+                // this.inputRef = React.createRef();
+
+                this.handleClick = this.handleClick.bind(this);
+            }
+
+            inputRef = React.createRef();
+
+            handleClick() {
+                this.inputRef.current.focus();
+            }
+
+            render() {
+                return (
+                    <div>
+                        <input type='text' style={{border: '1px solid #000', outline: 'none'}} ref={this.inputRef} />
+                        <hr />
+                        <input type='button' value='focus the text input' style={{border: '1px solid #000'}} onClick={this.handleClick} />
+                    </div>
+                )
+            }
+        }
+
+        ReactDOM.render(
+            <MyComponent />,
+            app
+        );
+    </script>
+</body>
+</html>
