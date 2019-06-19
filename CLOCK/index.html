@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>clock</title>
+    <script src="../build/react.development.js"></script>
+    <script src="../build/react-dom.development.js"></script>
+    <script src="../build/babel.min.js"></script>
+</head>
+<body>
+    <div id="app"></div>
+
+    <script type="text/babel">
+        const app = document.getElementById('app');
+
+        class Clock extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {
+                    time: Date.now()
+                };
+            }
+
+            componentDidMount() {
+                this.changeTime();
+            }
+
+            componentWillUnmount() {
+                clearInterval(this.timer);
+            }
+
+            changeTime() {
+                this.timer = setInterval(() => this.setState({ time: Date.now() }), 1000);
+            }
+
+            transformTime(time) {
+                const date = new Date(time);
+
+                const year = date.getFullYear();
+                const month = date.getMonth();
+                const day = date.getDate();
+                const week = date.getDay();
+                const hour = date.getHours();
+                const minute = date.getMinutes();
+                const second = date.getSeconds();
+
+                return `${year}年${this.checkNum(month)}月${this.checkNum(day)}日
+                    星期${week}
+                    ${this.checkNum(hour)}:${this.checkNum(minute)}:${this.checkNum(second)}
+                `;
+            }
+
+            checkNum(num) {
+                return num < 10 ? '0' + num : num;
+            }
+
+            render() {
+                const { time } = this.state;
+
+                return (
+                    <div style={{textAlign: 'center'}}>
+                        <h2>Today is:</h2>
+                        
+                        <h4>{ this.transformTime(time) }</h4>
+                    </div>
+                )
+            }
+        }
+
+        ReactDOM.render(<Clock />, app);
+    </script>
+</body>
+</html>
