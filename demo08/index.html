@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>component lifecycle</title>
+    <script src="../build/react.development.js"></script>
+    <script src="../build/react-dom.development.js"></script>
+    <script src="../build/babel.min.js"></script>
+</head>
+<body>
+    <div id="app"></div>
+
+    <script type="text/babel">
+        class Hello extends React.Component {
+            constructor(props) {
+                super(props);
+
+                this.state = {
+                    opacity: 1
+                }
+            }
+
+            componentDidMount() {
+                setInterval(() => {
+                    let { opacity } = this.state;
+                    
+                    opacity -= 0.1;
+
+                    if (opacity < 0.1) {
+                        opacity = 1;
+                    }
+                    
+                    this.setState({ opacity });
+
+                }, 500);
+            }
+
+            render() {
+                const { opacity } = this.state;
+
+                return (
+                    <div style={{opacity: opacity, color: 'green', fontWeight: 'bold'}}>
+                        Hello,
+                        {this.props.name}
+                    </div>
+                )
+            }
+        }
+
+        ReactDOM.render(
+            <Hello name='kobe'/>,
+            app
+        );
+    </script>
+</body>
+</html>
