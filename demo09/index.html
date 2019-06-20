@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ajax</title>
+    <script src="../build/react.development.js"></script>
+    <script src="../build/react-dom.development.js"></script>
+    <script src="../build/babel.min.js"></script>
+    <script src="../build/jquery.min.js"></script>
+</head>
+<body>
+    <div id="app"></div>
+
+    <script type='text/babel'>
+        class Users extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {
+                    list: [],
+                }
+            }
+
+            componentDidMount() {
+                $.get('https://api.github.com/users', (result) => {
+                    this.setState({ list: result });
+                });
+            }
+
+
+            render() {
+                const { list } = this.state;
+
+                return (
+                    <div>
+                        <h4>user list</h4>
+
+                        <ul style={{listStyle: 'none', padding: 0}}>
+                            {
+                                list.map(user => {
+                                    return (
+                                        <li key={user.login} style={{border: '1px solid #000', padding: '5px', marginBottom: '3px'}}>
+                                            <div>
+                                                login: { user.login }
+                                            </div>
+                                            
+                                            <div>
+                                                url: { user.url }
+                                            </div>
+                                        </li>
+                                    )
+                                })
+                            }
+                        </ul>
+                    </div>
+                )
+            }
+        }
+
+
+        ReactDOM.render(
+            <Users />,
+            document.getElementById('app')
+        );
+    </script>
+</body>
+</html>
