@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>props is promise</title>
+    <script src="../build/react.development.js"></script>
+    <script src="../build/react-dom.development.js"></script>
+    <script src="../build/babel.min.js"></script>
+    <script src="../build/jquery.min.js"></script>
+</head>
+<body>
+    <div id="app"></div>
+
+    <script type='text/babel'>
+        class RepoList extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {
+                    data: null,
+                    error: null,
+                    loading: true,
+                }
+            }
+
+            componentDidMount() {
+                const { promise } = this.props;
+
+                promise.then(res => {
+                    this.setState({data: res, loading: false});
+                }, error => {
+                    this.setState({error, loading: false});
+                });
+            }
+
+            render() {
+                const { data, error, loading } = this.state;
+
+                if (loading) {
+                    return <span>努力加载中......</span>
+                } else if (error !== null) {
+                    return <span>Error: { error.message }</span>
+                } else {
+                    const repoList = data.items.map(repo => {
+                        return (
+                            <li key={repo.id} style={{border: '1px solid green', marginBottom: '3px', padding: '3px'}}>
+                                <a href={repo.html_url}>{ repo.name }</a> &nbsp;&nbsp;
+                                {repo.stargazers_count} stars
+                                <br />
+                                { repo.description }
+                            </li>
+                        )
+                    });
+
+                    return (
+                        <div>
+                            <h4>Most Popular JavaScript Projects in Github</h4>
+                            <ol>{ repoList }</ol>
+                        </div>
+                    )
+                }
+            }
+        }
+
+
+        ReactDOM.render(
+            <RepoList promise={$.getJSON('https://api.github.com/search/repositories?q=javascript&sort=stars')}/>,
+            document.getElementById('app')
+        );
+    </script>
+</body>
+</html>
