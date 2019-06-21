@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>setState</title>
+    <script src="../build/react.development.js"></script>
+    <script src="../build/react-dom.development.js"></script>
+    <script src="../build/babel.min.js"></script>
+</head>
+<body>
+    <div id="app"></div>
+
+    <script type="text/babel">
+        class Count extends React.Component {
+            state = {
+                value: '',
+            }
+
+            onChange = (e) => {
+                // this.setState({ value: e.target.value });
+                //  this.setState 可能是异步原因，这里的value值是setState前的值，如果想获取更新后的value，可给setState添加第二个参数callback
+                // console.log(this.state.value);
+
+                //  获取的value为最新的值
+                this.setState({ value: e.target.value }, function() {
+                    console.log(this.state.value);
+                });
+            }
+
+            render() {
+                return (
+                    <div>
+                        <h4>input框值: {this.state.value}</h4>
+                        <input style={{border: '1px solid #000'}} onChange={this.onChange} value={this.state.value} />
+                    </div>
+                )
+            }
+        }
+
+        ReactDOM.render(
+            <Count />,
+            document.getElementById('app')
+        );
+    </script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>setState</title>
+    <script src="../build/react.development.js"></script>
+    <script src="../build/react-dom.development.js"></script>
+    <script src="../build/babel.min.js"></script>
+</head>
+<body>
+    <div id="app"></div>
+
+    <script type="text/babel">
+        class Count extends React.Component {
+            state = {
+                count: 0,
+            }
+
+            onClick = () => {
+                // 直观上来看，当点击button时，组件状态的count值被增加了3次，每次增加1，那最后count被增加了3，但是，实际上的结果只给state增加了1。
+                // 原因并不复杂，就是因为调用this.setState时，并没有立即更改this.state，所以this.setState只是在反复设置同一个值而已
+                // 另外多次setState函数调用产生的效果会合并，故render函数里面的console只会打印一次
+
+                // this.setState({ count: this.state.count + 1 });
+                // this.setState({ count: this.state.count + 1 });
+                // this.setState({ count: this.state.count + 1 });
+
+                // setState通过引发一次组件的更新过程来引发重新绘制
+
+                // setState调用引起的React的更新生命周期函数4个函数（比修改prop引发的生命周期少一个componentWillReceiveProps函数），这4个函数依次被调用。
+
+                // 1、shouldComponentUpdate
+                // 2、componentWillUpdate
+                // 3、render
+                // 4、componentDidUpdate
+
+                // 当shouldComponentUpdate函数被调用的时候，this.state没有得到更新。
+                // 当componentWillUpdate函数被调用的时候，this.state依然没有得到更新。
+
+                // 直到render函数被调用的时候，this.state才得到更新。
+
+                // (或者，当shouldComponentUpdate函数返回false，这时候更新过程就被中断了，render函数也不会被调用了，这时候React不会放弃掉对this.state的更新的，所以虽然不调用render，依然会更新this.state。）
+
+                // 那就可以简单认为，直到下一次render函数调用时（或者下一次shouldComponentUpdate返回false时）才得到更新的this.state。
+
+                // this.state不会在this.setState调用之后立刻更新。
+
+                // -------------------------------------  华丽丽的分割线  -------------------------------------------
+
+
+                // 下面同样是把状态中的count加1，但是状态的来源不是this.state，而是输入参数state。
+                // 对于多次调用函数式setState的情况，React会保证每次调用时，state都已经合并了之前的状态修改结果。
+                // 值得一提的是，在函数被调用时，this.state并没有被改变，依然，要等到render函数被重新执行时（或者shouldComponentUpdate函数返回false之后）才被改变。
+                // 所以render函数里面的console只会打印一次
+
+                this.setState(state => ({count: state.count + 1}));
+                this.setState(state => ({count: state.count + 1}));
+                this.setState(state => ({count: state.count + 1}));
+            }
+
+            render() {
+                console.log('render');
+
+                return (
+                    <div>
+                        <h4>count: {this.state.count}</h4>
+                        <button style={{border: '1px solid #000'}} onClick={this.onClick}>Add count</button>
+                    </div>
+                )
+            }
+        }
+
+        ReactDOM.render(
+            <Count />,
+            document.getElementById('app')
+        );
+    </script>
+</body>
+</html>
